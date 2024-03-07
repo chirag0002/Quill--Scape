@@ -1,1 +1,1 @@
-export const BACKEND_URL= " http://localhost:38423"
+export const BACKEND_URL= "https://api.varshneychirag34.workers.dev"
