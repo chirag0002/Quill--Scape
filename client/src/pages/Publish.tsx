@@ -8,7 +8,7 @@ const Publish = () => {
     const [description, setDescription] = useState('Start writing...');
     const [imageLink, setImageLink] = useState('');
 
-    const values ={
+    const values = {
         title,
         description,
         imageLink
@@ -36,13 +36,13 @@ const Publish = () => {
                     onChange={(e) => setImageLink(e.target.value)}
                     className="w-full py-2 px-4 mb-4 focus:outline-none border-b-2 border-transparent focus:border-gray-400"
                 />
-                <Editor description={description} setDescription={setDescription} />              
+                <div className="flex justify-center items-center ml-8 mb-4">
+                    {imageLink && (
+                        <img src={imageLink} alt="Blog" className="max-h-80 max-w-80 rounded-lg shadow-lg" />
+                    )}
+                </div>
+                <Editor description={description} setDescription={setDescription} />
             </div>
-            {/* <div className="flex justify-center items-center ml-8">
-                {imageLink && (
-                    <img src={imageLink} alt="Blog" className="max-h-80 max-w-80 rounded-lg shadow-lg" />
-                )}
-            </div> */}
         </div>
     </div>
 }

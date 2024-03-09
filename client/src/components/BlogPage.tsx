@@ -1,8 +1,15 @@
 import { BlogType } from "../hooks"
 import { Avatar } from "./BlogCard"
-import React from 'react';
 
 export const BlogPage = ({ blog }: { blog: BlogType | null }) => {
+
+    const date = (published_at: string) => {
+        const date = new Date(published_at);
+        const formattedDate = date.toDateString();
+
+        return formattedDate;
+    }
+
     if (!blog) {
         return <div>Loading...</div>
     }
@@ -12,7 +19,12 @@ export const BlogPage = ({ blog }: { blog: BlogType | null }) => {
                 {blog.title}
             </div>
             <div className="text-slate-500 pt-2">
-                Posted on 2nd november 2024
+                {date(blog.published_at)}
+            </div>
+            <div className="pt-4">
+                {blog.thumbnail && (
+                    <img src={blog.thumbnail} alt="Blog Thumbnail" className="w-full h-auto" />
+                )}
             </div>
             <div className="pt-4" dangerouslySetInnerHTML={{ __html: blog.content }} />
         </div>
@@ -27,7 +39,7 @@ export const BlogPage = ({ blog }: { blog: BlogType | null }) => {
                         {blog.author.name}
                     </div>
                     <div className="pt-2 text-slate-500">
-                        This is the short description of the author, so people who eads the blog, can know about the author.
+                        This is the short description of the author, so people who reads the blog, can know about the author.
                     </div>
                 </div>
             </div>

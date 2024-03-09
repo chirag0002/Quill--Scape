@@ -30,7 +30,7 @@ export const Apppbar = ({ type, values }: {
     };
 
     return <div className="border-b flex justify-between px-10 py-4">
-        <Link to="/blogs" className="cursor-pointerflex justify-center flex-col ">
+        <Link to="/blogs" className="cursor-pointerflex flex justify-center flex-col font-extrabold text-xl">
             Medium
         </Link>
         <div className='flex items-center justify-center'>

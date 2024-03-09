@@ -15,7 +15,7 @@ export const BlogCard = ({
     title,
     content,
     thumbnail,
-    // published_at,
+    published_at,
     id
 }: BlogCardProps) => {
 
@@ -25,6 +25,13 @@ export const BlogCard = ({
         return Math.ceil(readingTime);
     };
     const readingTime = calculateReadingTime(content);
+
+    const date = ({published_at}:{published_at: string}) => {
+        const date = new Date(published_at);
+        const formattedDate = date.toDateString();
+        
+        return formattedDate;
+    }
 
     return <Link to={`/blog/${id}`}>
         <div className="flex w-5/6 justify-center m-auto border-b border-slate-200 cursor-pointer">
@@ -40,14 +47,14 @@ export const BlogCard = ({
                         <Circle />
                     </div>
                     <div className="font-thin text-slate-600 pl2 text-sm md:text-base">
-                        {/* {published_at} */}
+                        {date({published_at})}
                     </div>
                 </div>
                 <div className="text-xl md:text-2xl font-semibold mt-4 mb-2">
                     {title}
                 </div>
                 <div className="text-md font-thin mb-2 hidden md:block ">
-                <TruncateHTMLContent content={content} maxLength={200} />
+                    <TruncateHTMLContent content={content} maxLength={200} />
                 </div>
                 <div className="text-slate-500 text-xs md:text-sm font-thin">
                     {readingTime} min read
@@ -60,7 +67,7 @@ export const BlogCard = ({
     </Link>
 }
 
-function TruncateHTMLContent({content, maxLength}:{content:string, maxLength:number}): JSX.Element {
+function TruncateHTMLContent({ content, maxLength }: { content: string, maxLength: number }): JSX.Element {
     const tempElement = document.createElement('div');
     tempElement.innerHTML = content;
     let textContent = tempElement.textContent || tempElement.innerText || '';
@@ -68,17 +75,17 @@ function TruncateHTMLContent({content, maxLength}:{content:string, maxLength:num
         textContent = textContent.slice(0, maxLength) + '...';
     }
     return <>{textContent}</>;
-}   
+}
 
-function Circle() {
+export const Circle = () => {
     return <div className="h-1 w-1 rounded-full bg-slate-500">
 
     </div>
 }
 
-export function Avatar({ name, size="small" }: { name: string, size:"small" | "big" }) {
-    return <div className={`relative inline-flex items-center justify-center overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 mr-1 ${size==="small" ? "w-4 h-4 md:w-5 md:h-5" : "w-8 h-8 md:w-9 md:h-9"}`}>
-        <span className={`${size==="small" ? "text-xs" : "text-md"} text-gray-600 dark:text-gray-300 `}>
+export function Avatar({ name, size = "small" }: { name: string, size: "small" | "big" }) {
+    return <div className={`relative inline-flex items-center justify-center overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 mr-1 ${size === "small" ? "w-4 h-4 md:w-5 md:h-5" : "w-8 h-8 md:w-9 md:h-9"}`}>
+        <span className={`${size === "small" ? "text-xs" : "text-md"} text-gray-600 dark:text-gray-300 `}>
             {name[0]}
         </span>
     </div>

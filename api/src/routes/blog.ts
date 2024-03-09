@@ -42,8 +42,7 @@ blogRouter.post('/', async (c) => {
                 title: body.title,
                 authorId: Number(userId),
                 content: body.content,
-                thumbnail: body.thumbnail
-
+                thumbnail: body.thumbnail,
             }
         })
 
@@ -75,7 +74,6 @@ blogRouter.put('/', async (c) => {
                 title: body.title,
                 content: body.content,
                 thumbnail: body.thumbnail
-
             }
         })
 
@@ -105,11 +103,15 @@ blogRouter.get('/bulk', async (c) => {
         const blogs = await prsima.blog.findMany({
             take: Number(pageSize),
             skip: skip,
+            orderBy: {
+                id: 'desc' 
+            },
             select:{
                 id:true,
                 title:true,
                 content:true,
                 thumbnail:true,
+                published_at:true,
                 author:{
                     select:{
                         name:true
@@ -146,6 +148,7 @@ blogRouter.get('/:id', async (c) => {
                 title:true,
                 content:true,
                 thumbnail:true,
+                published_at:true,
                 author:{
                     select:{
                         name:true

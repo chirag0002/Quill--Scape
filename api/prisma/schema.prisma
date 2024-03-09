@@ -17,10 +17,11 @@ model User {
 }
 
 model Blog {
-  id        Int     @id @default(autoincrement())
-  authorId  Int
-  content   String
-  thumbnail String?
-  title     String
-  author    User    @relation(fields: [authorId], references: [id])
+  id           Int      @id @default(autoincrement())
+  authorId     Int
+  content      String
+  thumbnail    String?
+  title        String
+  published_at DateTime @default(now())
+  author       User     @relation(fields: [authorId], references: [id])
 }

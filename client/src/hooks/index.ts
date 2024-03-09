@@ -7,18 +7,18 @@ export interface BlogType {
     title: string;
     content: string;
     thumbnail: string;
-    // published_at: string;
+    published_at: string;
     author: {
         name: string;
     }
 }
 
-export const useBlogs = () => {
+export const useBlogs = ({page}:{page:number }) => {
     const [loading, setLoading] = useState(true);
     const [blogs, setBlogs] = useState<BlogType[]>([]);
 
     useEffect(() => {
-        axios.get(`${BACKEND_URL}/api/v1/blog/bulk`,{
+        axios.get(`${BACKEND_URL}/api/v1/blog/bulk?page=${page}`,{
             headers: {
                 Authorization: localStorage.getItem('token')
             }
@@ -27,7 +27,7 @@ export const useBlogs = () => {
             setBlogs(response.data.blogs);
             setLoading(false);
         })
-    },[])
+    },[page])
     
     return {
         blogs,
