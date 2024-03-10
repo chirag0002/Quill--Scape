@@ -38,6 +38,7 @@ userRouter.post('/signup', async (c) => {
 
         c.status(200);
         return c.json({
+            user: user.name,
             message: "User created successfully",
             jwt: jwt
         });
@@ -83,6 +84,7 @@ userRouter.post('/signin', async (c) => {
 
         c.status(200);
         return c.json({
+            user: user.name,
             message: "User signedIn successfully",
             jwt: jwt
         });

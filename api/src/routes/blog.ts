@@ -1,4 +1,4 @@
-import { Hono } from "hono"
+import { Context, Hono, Next } from "hono"
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { verify } from "hono/jwt";
@@ -13,7 +13,7 @@ export const blogRouter = new Hono<{
     }
 }>();
 
-blogRouter.use('/*', async (c, next) => {
+const authenticate = async (c:Context, next:Next) => {
     const token = await c.req.header('authorization') || "";
     const user = await verify(token, c.env.JWT_SECRET);
 
@@ -27,9 +27,9 @@ blogRouter.use('/*', async (c, next) => {
             message: "Unauthorized"
         });
     }
-})
+}
 
-blogRouter.post('/', async (c) => {
+blogRouter.post('/', authenticate, async (c) => {
     const body = await c.req.json();
     const userId = c.get('userId')
     const prisma = new PrismaClient({
@@ -58,30 +58,46 @@ blogRouter.post('/', async (c) => {
     }
 })
 
-blogRouter.put('/', async (c) => {
-    const body = await c.req.json();
+blogRouter.get('/bulk/me', authenticate, async (c) => {
+    const page = c.req.query("page") || 1;
+    const pageSize = c.req.query("pageSize") || 10;
 
-    const prisma = new PrismaClient({
+    const userId = c.get('userId')
+
+    const prsima = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
-    }).$extends(withAccelerate())
+    }).$extends(withAccelerate());
 
     try {
-        const blog = await prisma.blog.update({
-            where: {
-                id: body.id
+        const skip = (Number(page) - 1) * Number(pageSize);
+
+        const blogs = await prsima.blog.findMany({
+            where:{
+                authorId: Number(userId)
             },
-            data: {
-                title: body.title,
-                content: body.content,
-                thumbnail: body.thumbnail
+            take: Number(pageSize),
+            skip: skip,
+            orderBy: {
+                id: 'desc' 
+            },
+            select:{
+                id:true,
+                title:true,
+                content:true,
+                thumbnail:true,
+                published_at:true,
+                author:{
+                    select:{
+                        name:true
+                    }
+                }
             }
-        })
+        });
 
         c.status(200);
         return c.json({
-            message: "Blog updated successfully",
-            id: blog.id
-        });
+            blogs: blogs
+        })
     } catch (e) {
         console.log(e);
         c.status(400);

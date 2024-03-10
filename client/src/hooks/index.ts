@@ -18,7 +18,25 @@ export const useBlogs = ({page}:{page:number }) => {
     const [blogs, setBlogs] = useState<BlogType[]>([]);
 
     useEffect(() => {
-        axios.get(`${BACKEND_URL}/api/v1/blog/bulk?page=${page}`,{
+        axios.get(`${BACKEND_URL}/api/v1/blog/bulk?page=${page}`)
+        .then(response => {
+            setBlogs(response.data.blogs);
+            setLoading(false);
+        })
+    },[page])
+    
+    return {
+        blogs,
+        loading
+    }
+}
+
+export const useMyBlogs = ({page}:{page:number }) => {
+    const [loading, setLoading] = useState(true);
+    const [blogs, setBlogs] = useState<BlogType[]>([]);
+
+    useEffect(() => {
+        axios.get(`${BACKEND_URL}/api/v1/blog/bulk/me?page=${page}`,{
             headers: {
                 Authorization: localStorage.getItem('token')
             }
@@ -40,11 +58,7 @@ export const useBlog = ({id}: {id:string}) => {
     const [blog, setBlog] = useState<BlogType | null>(null);
 
     useEffect(() => {
-        axios.get(`${BACKEND_URL}/api/v1/blog/${id}`,{
-            headers: {
-                Authorization: localStorage.getItem('token')
-            }
-        })
+        axios.get(`${BACKEND_URL}/api/v1/blog/${id}`)
         .then(response => {
             setBlog(response.data.blog);
             setLoading(false);

@@ -26,7 +26,7 @@ export const BlogPage = ({ blog }: { blog: BlogType | null }) => {
                     <img src={blog.thumbnail} alt="Blog Thumbnail" className="w-full h-auto" />
                 )}
             </div>
-            <div className="pt-4" dangerouslySetInnerHTML={{ __html: blog.content }} />
+            <div className="pt-4 text-justify" dangerouslySetInnerHTML={{ __html: blog.content }} />
         </div>
         <div className="w-1/3">
             <div className="text-slate-600 text-lg">Author</div>
